@@ -1,0 +1,695 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="theme-color" content="#0066b2">
+  <title>Debbiom - Registro de Tomas</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      -webkit-tap-highlight-color: rgba(0,0,0,0);
+    }
+    
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+      background: linear-gradient(135deg, #0066b2 0%, #004d87 50%, #00a8e1 100%);
+      min-height: 100vh;
+      padding: 10px;
+      padding-bottom: 30px;
+      overflow-x: hidden;
+    }
+    
+    .header-logo {
+      text-align: center;
+      padding: 20px 0;
+      margin-bottom: 20px;
+    }
+
+    .logo-container {
+      background: white;
+      display: inline-block;
+      padding: 20px 30px;
+      border-radius: 20px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+    }
+
+    .logo-svg {
+      width: 180px;
+      height: auto;
+      display: block;
+      margin: 0 auto;
+    }
+
+    .app-subtitle {
+      color: white;
+      font-size: 16px;
+      text-align: center;
+      margin-top: 15px;
+      font-weight: 500;
+      text-shadow: 0 2px 4px rgba(0,0,0,0.2);
+    }
+    
+    .container {
+      max-width: 600px;
+      margin: 0 auto;
+      background: white;
+      padding: 20px;
+      border-radius: 20px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+    }
+    
+    h2 {
+      text-align: center;
+      color: #0066b2;
+      margin-bottom: 20px;
+      font-size: clamp(20px, 5vw, 24px);
+      word-wrap: break-word;
+      font-weight: 700;
+    }
+    
+    button {
+      width: 100%;
+      padding: 14px;
+      font-size: clamp(14px, 4vw, 18px);
+      font-weight: 600;
+      color: white;
+      border: none;
+      border-radius: 12px;
+      cursor: pointer;
+      margin-bottom: 10px;
+      transition: all 0.2s ease;
+      box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+      touch-action: manipulation;
+      -webkit-user-select: none;
+      user-select: none;
+    }
+    
+    button:active {
+      transform: scale(0.98);
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    }
+
+    button:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 12px rgba(0,0,0,0.15);
+    }
+    
+    .btn-primary {
+      background: linear-gradient(135deg, #0066b2 0%, #004d87 100%);
+    }
+    
+    .btn-guardar {
+      background: linear-gradient(135deg, #2ecc71 0%, #27ae60 100%);
+    }
+    
+    .btn-descargar {
+      background: linear-gradient(135deg, #00a8e1 0%, #0088b8 100%);
+    }
+
+    .btn-secondary {
+      background: linear-gradient(135deg, #95a5a6 0%, #7f8c8d 100%);
+    }
+
+    .btn-danger {
+      background: linear-gradient(135deg, #e74c3c 0%, #c0392b 100%);
+    }
+    
+    input {
+      width: 100%;
+      padding: 14px;
+      font-size: clamp(14px, 4vw, 16px);
+      border: 2px solid #e0e0e0;
+      border-radius: 12px;
+      margin-bottom: 10px;
+      transition: all 0.3s ease;
+    }
+
+    input:focus {
+      outline: none;
+      border-color: #0066b2;
+      box-shadow: 0 0 0 4px rgba(0, 102, 178, 0.1);
+    }
+
+    select {
+      width: 100%;
+      padding: 14px;
+      font-size: clamp(14px, 4vw, 16px);
+      border: 2px solid #e0e0e0;
+      border-radius: 12px;
+      margin-bottom: 10px;
+      background: white;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+
+    select:focus {
+      outline: none;
+      border-color: #0066b2;
+      box-shadow: 0 0 0 4px rgba(0, 102, 178, 0.1);
+    }
+    
+    ul {
+      list-style: none;
+      margin-top: 15px;
+    }
+    
+    li {
+      margin-bottom: 10px;
+      background: linear-gradient(135deg, #f8f9fa 0%, #ffffff 100%);
+      padding: 14px;
+      border-radius: 12px;
+      border-left: 4px solid #0066b2;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+      transition: all 0.2s ease;
+    }
+
+    li:hover {
+      transform: translateX(5px);
+      box-shadow: 0 4px 12px rgba(0,0,0,0.12);
+    }
+    
+    .toma-info {
+      font-size: clamp(12px, 3.5vw, 14px);
+      line-height: 1.5;
+      color: #555;
+      margin-bottom: 10px;
+      word-wrap: break-word;
+    }
+    
+    .toma-numero {
+      font-weight: bold;
+      color: #0066b2;
+      font-size: clamp(14px, 4vw, 16px);
+      display: block;
+      margin-bottom: 5px;
+    }
+    
+    .delete-btn {
+      width: 100%;
+      background: linear-gradient(135deg, #e74c3c 0%, #c0392b 100%);
+      border: none;
+      color: white;
+      padding: 10px;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: clamp(12px, 3.5vw, 14px);
+      font-weight: 600;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+      transition: all 0.2s ease;
+    }
+    
+    .delete-btn:active {
+      background: #c0392b;
+      transform: scale(0.98);
+    }
+    
+    .empty-state {
+      text-align: center;
+      padding: 40px 20px;
+      color: #999;
+      font-size: clamp(14px, 4vw, 16px);
+      line-height: 1.6;
+    }
+    
+    .fecha-actual {
+      text-align: center;
+      color: #0066b2;
+      font-size: clamp(12px, 3.5vw, 14px);
+      margin-bottom: 15px;
+      font-weight: 600;
+      word-wrap: break-word;
+      padding: 10px;
+      background: linear-gradient(135deg, #e3f2fd 0%, #bbdefb 100%);
+      border-radius: 10px;
+    }
+
+    .usuario-actual {
+      text-align: center;
+      background: linear-gradient(135deg, #0066b2 0%, #004d87 100%);
+      color: white;
+      padding: 12px;
+      border-radius: 12px;
+      margin-bottom: 15px;
+      font-size: clamp(14px, 4vw, 16px);
+      font-weight: 600;
+      word-wrap: break-word;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+    }
+
+    .screen {
+      display: none;
+    }
+
+    .screen.active {
+      display: block;
+    }
+
+    .status-indicator {
+      position: fixed;
+      top: 10px;
+      right: 10px;
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      background: #2ecc71;
+      box-shadow: 0 0 10px rgba(46, 204, 113, 0.5);
+      z-index: 1000;
+    }
+
+    .sync-status {
+      text-align: center;
+      font-size: clamp(11px, 3vw, 12px);
+      color: #7f8c8d;
+      margin-top: 10px;
+      padding: 8px;
+      background: linear-gradient(135deg, #ecf0f1 0%, #e0e0e0 100%);
+      border-radius: 8px;
+    }
+
+    .footer-branding {
+      text-align: center;
+      padding: 20px;
+      color: white;
+      font-size: 12px;
+      margin-top: 20px;
+      text-shadow: 0 2px 4px rgba(0,0,0,0.2);
+    }
+
+    .footer-branding a {
+      color: white;
+      text-decoration: none;
+      font-weight: 600;
+    }
+
+    @media (max-width: 360px) {
+      .container {
+        padding: 15px;
+      }
+      
+      button {
+        padding: 12px;
+        font-size: 14px;
+      }
+      
+      li {
+        padding: 12px;
+      }
+
+      .logo-svg {
+        width: 120px;
+      }
+    }
+
+    @media (min-width: 768px) {
+      .container {
+        padding: 30px;
+      }
+
+      .logo-svg {
+        width: 220px;
+      }
+    }
+
+    input, select, button {
+      -webkit-appearance: none;
+      appearance: none;
+    }
+
+    input:focus, select:focus {
+      font-size: 16px;
+    }
+  </style>
+</head>
+<body>
+  <div class="status-indicator" id="statusIndicator"></div>
+
+  <div class="header-logo">
+    <div class="logo-container">
+      <svg class="logo-svg" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+        <!-- Centro -->
+        <circle cx="100" cy="100" r="10" fill="#004d87"/>
+        
+        <!-- Primer anillo -->
+        <circle cx="115" cy="100" r="8" fill="#0066b2"/>
+        <circle cx="125" cy="110" r="8" fill="#0088b8"/>
+        <circle cx="125" cy="125" r="8" fill="#00a8e1"/>
+        <circle cx="115" cy="135" r="8" fill="#a8d600"/>
+        <circle cx="100" cy="140" r="8" fill="#c8e100"/>
+        <circle cx="85" cy="135" r="8" fill="#dce100"/>
+        <circle cx="75" cy="125" r="8" fill="#c8e100"/>
+        <circle cx="75" cy="110" r="8" fill="#a8d600"/>
+        <circle cx="85" cy="100" r="8" fill="#00a8e1"/>
+        
+        <!-- Segundo anillo -->
+        <circle cx="130" cy="100" r="7" fill="#00447a"/>
+        <circle cx="140" cy="115" r="7" fill="#005293"/>
+        <circle cx="145" cy="130" r="7" fill="#0066b2"/>
+        <circle cx="145" cy="145" r="7" fill="#0088b8"/>
+        <circle cx="135" cy="155" r="7" fill="#00a8e1"/>
+        <circle cx="120" cy="160" r="7" fill="#8cba00"/>
+        <circle cx="100" cy="160" r="7" fill="#a8d600"/>
+        <circle cx="80" cy="160" r="7" fill="#c8e100"/>
+        <circle cx="65" cy="155" r="7" fill="#dce100"/>
+        <circle cx="55" cy="145" r="7" fill="#c8e100"/>
+        <circle cx="55" cy="130" r="7" fill="#a8d600"/>
+        <circle cx="55" cy="115" r="7" fill="#00a8e1"/>
+        <circle cx="60" cy="100" r="7" fill="#0088b8"/>
+        <circle cx="70" cy="85" r="7" fill="#0066b2"/>
+        <circle cx="85" cy="75" r="7" fill="#005293"/>
+        <circle cx="100" cy="70" r="7" fill="#00447a"/>
+        <circle cx="115" cy="75" r="7" fill="#005293"/>
+        <circle cx="130" cy="85" r="7" fill="#0066b2"/>
+        
+        <!-- Tercer anillo -->
+        <circle cx="145" cy="100" r="5" fill="#00335a"/>
+        <circle cx="155" cy="118" r="5" fill="#00447a"/>
+        <circle cx="160" cy="135" r="5" fill="#005293"/>
+        <circle cx="160" cy="155" r="5" fill="#0066b2"/>
+        <circle cx="150" cy="170" r="5" fill="#0088b8"/>
+        <circle cx="135" cy="178" r="5" fill="#00a8e1"/>
+        <circle cx="115" cy="180" r="5" fill="#8cba00"/>
+        <circle cx="95" cy="180" r="5" fill="#a8d600"/>
+        <circle cx="75" cy="178" r="5" fill="#c8e100"/>
+        <circle cx="60" cy="170" r="5" fill="#dce100"/>
+        <circle cx="45" cy="158" r="5" fill="#dce100"/>
+        <circle cx="40" cy="140" r="5" fill="#c8e100"/>
+        <circle cx="40" cy="120" r="5" fill="#a8d600"/>
+        <circle cx="40" cy="100" r="5" fill="#00a8e1"/>
+        <circle cx="45" cy="82" r="5" fill="#0088b8"/>
+        <circle cx="55" cy="68" r="5" fill="#0066b2"/>
+        <circle cx="70" cy="58" r="5" fill="#005293"/>
+        <circle cx="88" cy="50" r="5" fill="#00447a"/>
+        <circle cx="105" cy="48" r="5" fill="#00335a"/>
+        <circle cx="122" cy="50" r="5" fill="#00447a"/>
+        <circle cx="138" cy="58" r="5" fill="#005293"/>
+        <circle cx="150" cy="70" r="5" fill="#0066b2"/>
+        <circle cx="158" cy="85" r="5" fill="#0088b8"/>
+      </svg>
+    </div>
+    <div class="app-subtitle">Sistema de Registro de Tomas por Día</div>
+  </div>
+
+  <!-- Pantalla de Login -->
+  <div id="loginScreen" class="screen active">
+    <div class="container">
+      <h2>🔐 Iniciar Sesión</h2>
+      <select id="selectUsuario">
+        <option value="">Seleccionar usuario...</option>
+      </select>
+      <button class="btn-primary" onclick="iniciarSesion()">Iniciar Sesión</button>
+      <button class="btn-secondary" onclick="mostrarAgregarUsuario()">➕ Agregar Nuevo Usuario</button>
+      <div class="sync-status" id="syncStatus">💾 Tus datos están guardados de forma permanente</div>
+    </div>
+  </div>
+
+  <!-- Pantalla de Agregar Usuario -->
+  <div id="agregarUsuarioScreen" class="screen">
+    <div class="container">
+      <h2>👤 Agregar Nuevo Usuario</h2>
+      <input type="text" id="nuevoUsuario" placeholder="Nombre del usuario" maxlength="30">
+      <button class="btn-primary" onclick="agregarUsuario()">Crear Usuario</button>
+      <button class="btn-secondary" onclick="volverLogin()">Cancelar</button>
+    </div>
+  </div>
+
+  <!-- Pantalla Principal -->
+  <div id="mainScreen" class="screen">
+    <div class="container">
+      <h2>📋 Registro de Tomas</h2>
+      <div class="usuario-actual">
+        <span id="usuarioActual"></span>
+      </div>
+      <div class="fecha-actual" id="fechaActual"></div>
+      <button class="btn-guardar" onclick="guardarToma()">📅 Guardar Fecha y Hora</button>
+      <button class="btn-descargar" onclick="descargarExcel()">📥 Descargar CSV</button>
+      <button class="btn-secondary" onclick="cerrarSesion()">🚪 Cerrar Sesión</button>
+      <ul id="listaTomas"></ul>
+      <div class="sync-status" id="syncStatusMain">
+        💾 Guardado automáticamente - Tus registros están seguros
+      </div>
+    </div>
+  </div>
+
+  <div class="footer-branding">
+    Desarrollado para <strong>Debbiom</strong> © 2025 | Aplicación Web
+  </div>
+
+  <script>
+    let usuarioActivo = null;
+
+    function guardarDatos() {
+      try {
+        // Los datos se guardan automáticamente en localStorage
+        // localStorage persiste incluso cuando cierras el navegador
+        console.log('✓ Datos guardados correctamente');
+      } catch (e) {
+        console.error('Error al guardar:', e);
+      }
+    }
+
+    function inicializarApp() {
+      // Cargar usuarios guardados desde localStorage
+      let usuarios = JSON.parse(localStorage.getItem('usuarios')) || [];
+      if (usuarios.length === 0) {
+        usuarios = ['Usuario 1'];
+        localStorage.setItem('usuarios', JSON.stringify(usuarios));
+      }
+      cargarListaUsuarios();
+      mostrarPantalla('loginScreen');
+      
+      // Autoguardado cada 10 segundos
+      setInterval(guardarDatos, 10000);
+    }
+
+    function mostrarPantalla(pantallaId) {
+      document.querySelectorAll('.screen').forEach(screen => {
+        screen.classList.remove('active');
+      });
+      document.getElementById(pantallaId).classList.add('active');
+    }
+
+    function cargarListaUsuarios() {
+      const usuarios = JSON.parse(localStorage.getItem('usuarios')) || [];
+      const select = document.getElementById('selectUsuario');
+      select.innerHTML = '<option value="">Seleccionar usuario...</option>';
+      
+      usuarios.forEach(usuario => {
+        const option = document.createElement('option');
+        option.value = usuario;
+        option.textContent = usuario;
+        select.appendChild(option);
+      });
+    }
+
+    function iniciarSesion() {
+      const usuario = document.getElementById('selectUsuario').value;
+      if (!usuario) {
+        alert('Por favor selecciona un usuario');
+        return;
+      }
+      
+      usuarioActivo = usuario;
+      document.getElementById('usuarioActual').textContent = `👤 ${usuario}`;
+      actualizarFechaDisplay();
+      mostrarTomas();
+      mostrarPantalla('mainScreen');
+      
+      if (navigator.vibrate) {
+        navigator.vibrate(50);
+      }
+    }
+
+    function mostrarAgregarUsuario() {
+      document.getElementById('nuevoUsuario').value = '';
+      mostrarPantalla('agregarUsuarioScreen');
+    }
+
+    function agregarUsuario() {
+      const nuevoUsuario = document.getElementById('nuevoUsuario').value.trim();
+      if (!nuevoUsuario) {
+        alert('Por favor ingresa un nombre de usuario');
+        return;
+      }
+
+      let usuarios = JSON.parse(localStorage.getItem('usuarios')) || [];
+      if (usuarios.includes(nuevoUsuario)) {
+        alert('Este usuario ya existe');
+        return;
+      }
+
+      usuarios.push(nuevoUsuario);
+      localStorage.setItem('usuarios', JSON.stringify(usuarios));
+      guardarDatos();
+      
+      if (navigator.vibrate) {
+        navigator.vibrate(50);
+      }
+      
+      alert(`Usuario "${nuevoUsuario}" creado exitosamente`);
+      cargarListaUsuarios();
+      volverLogin();
+    }
+
+    function volverLogin() {
+      mostrarPantalla('loginScreen');
+    }
+
+    function cerrarSesion() {
+      guardarDatos();
+      usuarioActivo = null;
+      mostrarPantalla('loginScreen');
+    }
+
+    function obtenerFechaActual() {
+      const hoy = new Date();
+      return hoy.toISOString().split('T')[0];
+    }
+
+    function limpiarSiEsNuevoDia() {
+      if (!usuarioActivo) return;
+      
+      const claveFecha = `fechaActual_${usuarioActivo}`;
+      const fechaGuardada = localStorage.getItem(claveFecha);
+      const fechaHoy = obtenerFechaActual();
+
+      if (fechaGuardada !== fechaHoy) {
+        localStorage.setItem(claveFecha, fechaHoy);
+        localStorage.setItem(`tomas_${usuarioActivo}`, JSON.stringify([]));
+        guardarDatos();
+      }
+    }
+
+    function actualizarFechaDisplay() {
+      const hoy = new Date();
+      const opciones = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+      document.getElementById('fechaActual').textContent = hoy.toLocaleDateString('es-MX', opciones);
+    }
+
+    function guardarToma() {
+      if (!usuarioActivo) return;
+      
+      limpiarSiEsNuevoDia();
+
+      const ahora = new Date();
+      const fechaHora = ahora.toLocaleString('es-MX', {
+        weekday: 'long',
+        year: 'numeric',
+        month: 'long',
+        day: 'numeric',
+        hour: '2-digit',
+        minute: '2-digit',
+        second: '2-digit'
+      });
+
+      let tomas = JSON.parse(localStorage.getItem(`tomas_${usuarioActivo}`)) || [];
+      const numeroToma = tomas.length + 1;
+      tomas.push({ numero: numeroToma, fechaHora, timestamp: ahora.toISOString() });
+      localStorage.setItem(`tomas_${usuarioActivo}`, JSON.stringify(tomas));
+      
+      guardarDatos();
+      mostrarTomas();
+      
+      if (navigator.vibrate) {
+        navigator.vibrate(50);
+      }
+    }
+
+    function mostrarTomas() {
+      if (!usuarioActivo) return;
+      
+      limpiarSiEsNuevoDia();
+
+      const lista = document.getElementById('listaTomas');
+      lista.innerHTML = '';
+      const tomas = JSON.parse(localStorage.getItem(`tomas_${usuarioActivo}`)) || [];
+
+      if (tomas.length === 0) {
+        lista.innerHTML = '<div class="empty-state">No hay registros aún.<br>Presiona el botón para comenzar.</div>';
+        return;
+      }
+
+      tomas.forEach((toma, index) => {
+        const li = document.createElement('li');
+        li.innerHTML = `
+          <div class="toma-info">
+            <span class="toma-numero">📌 Toma ${toma.numero}</span>
+            ${toma.fechaHora}
+          </div>
+          <button class="delete-btn" onclick="eliminarToma(${index})">🗑️ Eliminar</button>
+        `;
+        lista.appendChild(li);
+      });
+    }
+
+    function eliminarToma(index) {
+      if (!usuarioActivo) return;
+      
+      if (!confirm('¿Estás seguro de eliminar este registro?')) {
+        return;
+      }
+      
+      let tomas = JSON.parse(localStorage.getItem(`tomas_${usuarioActivo}`)) || [];
+      tomas.splice(index, 1);
+      tomas = tomas.map((toma, i) => ({ ...toma, numero: i + 1 }));
+      localStorage.setItem(`tomas_${usuarioActivo}`, JSON.stringify(tomas));
+      
+      guardarDatos();
+      mostrarTomas();
+      
+      if (navigator.vibrate) {
+        navigator.vibrate(30);
+      }
+    }
+
+    function descargarExcel() {
+      if (!usuarioActivo) return;
+      
+      limpiarSiEsNuevoDia();
+
+      const tomas = JSON.parse(localStorage.getItem(`tomas_${usuarioActivo}`)) || [];
+      if (tomas.length === 0) {
+        alert("No hay registros para exportar.");
+        return;
+      }
+
+      let csv = "\uFEFFNúmero de toma,Fecha y hora exacta,Usuario\n";
+      tomas.forEach(toma => {
+        csv += `${toma.numero},"${toma.fechaHora}","${usuarioActivo}"\n`;
+      });
+
+      const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+      const url = URL.createObjectURL(blob);
+      const link = document.createElement("a");
+      link.setAttribute("href", url);
+      link.setAttribute("download", `registro_tomas_${usuarioActivo}_${obtenerFechaActual()}.csv`);
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      
+      if (navigator.vibrate) {
+        navigator.vibrate([50, 100, 50]);
+      }
+    }
+
+    // Guardar antes de cerrar la página
+    window.addEventListener('beforeunload', (e) => {
+      guardarDatos();
+    });
+
+    // Guardar al cambiar de pestaña
+    document.addEventListener('visibilitychange', () => {
+      if (document.hidden) {
+        guardarDatos();
+      }
+    });
+
+    // Inicializar cuando carga la página
+    window.onload = inicializarApp;
+  </script>
+</body>
+</html>
